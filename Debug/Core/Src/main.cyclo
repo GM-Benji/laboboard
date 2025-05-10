@@ -1,3 +1,4 @@
-../Core/Src/main.c:66:5:main	1
-../Core/Src/main.c:113:6:SystemClock_Config	3
-../Core/Src/main.c:158:6:Error_Handler	1
+../Core/Src/main.c:59:6:stepper1Config	1
+../Core/Src/main.c:78:5:main	1
+../Core/Src/main.c:134:6:SystemClock_Config	3
+../Core/Src/main.c:179:6:Error_Handler	1

@@ -60,8 +60,8 @@ all: main-build
 main-build: laboboard.elf secondary-outputs
 
 # Tool invocations
-laboboard.elf laboboard.map: $(OBJS) $(USER_OBJS) C:\Users\barto\OneDrive\Pulpit\Laboboard\laboboard\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "laboboard.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\barto\OneDrive\Pulpit\Laboboard\laboboard\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="laboboard.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+laboboard.elf laboboard.map: $(OBJS) $(USER_OBJS) C:\Users\benia\OneDrive\Dokumenty\KNR\laboboard\laboboard\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "laboboard.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\benia\OneDrive\Dokumenty\KNR\laboboard\laboboard\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="laboboard.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -1,5 +1,5 @@
 ../Core/Src/gpio.c:39:6:MX_GPIO_Init	48	static
-../Core/Src/gpio.c:118:6:Motor_init	8	static
-../Core/Src/gpio.c:135:6:Set_Motor1	16	static
-../Core/Src/gpio.c:157:6:Set_Motor2	16	static
-../Core/Src/gpio.c:178:6:HAL_GPIO_EXTI_Callback	24	static
+../Core/Src/gpio.c:124:6:Motor_init	8	static
+../Core/Src/gpio.c:141:6:Set_Motor1	16	static
+../Core/Src/gpio.c:163:6:Set_Motor2	16	static
+../Core/Src/gpio.c:184:6:HAL_GPIO_EXTI_Callback	24	static

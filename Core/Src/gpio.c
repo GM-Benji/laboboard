@@ -58,9 +58,12 @@ void MX_GPIO_Init(void)
                           |Motor2_IN2_Pin|Stepper3_M2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, Stepper1_M0_Pin|Stepper1_Step_Pin|Stepper1_E_Pin|Stepper1_Dir_Pin
-                          |Stepper1_R_Pin|Stepper2_M2_Pin|Stepper2_M1_Pin|Stepper3_Step_Pin
-                          |Stepper3_E_Pin|Stepper3_Dir_Pin|Stepper3_R_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, Stepper1_M0_Pin|Stepper1_E_Pin|Stepper1_Dir_Pin|Stepper1_R_Pin
+                          |Stepper2_M2_Pin|Stepper2_M1_Pin|Stepper3_Step_Pin|Stepper3_E_Pin
+                          |Stepper3_Dir_Pin|Stepper3_R_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(Stepper1_Step_GPIO_Port, Stepper1_Step_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);

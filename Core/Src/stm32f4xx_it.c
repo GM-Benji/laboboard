@@ -57,6 +57,9 @@
 /* External variables --------------------------------------------------------*/
 extern CAN_HandleTypeDef hcan1;
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim7;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -247,12 +250,64 @@ void CAN1_RX1_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
+	static uint8_t counter;
+	//HAL_GPIO_TogglePin(Stepper2_Step_GPIO_Port,Stepper2_Step_Pin);
+	//HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
+	if(counter==1)
+	{
+		HAL_GPIO_WritePin(Motor1_IN1_GPIO_Port,Motor1_IN1_Pin,GPIO_PIN_RESET);
+	}
+	counter++;
+	if(counter==24)
+	{
+		counter =0;
+		HAL_GPIO_WritePin(Motor1_IN1_GPIO_Port,Motor1_IN1_Pin,GPIO_PIN_SET);
+	}
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
 
   /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM3 global interrupt.
+  */
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM3_IRQn 0 */
+	static int16_t counter;
+	counter++;
+	HAL_GPIO_TogglePin(Stepper2_Step_GPIO_Port,Stepper2_Step_Pin);
+	if(counter>317)
+	{
+		counter=0;
+		HAL_NVIC_DisableIRQ(TIM3_IRQn);
+		HAL_NVIC_EnableIRQ(TIM2_IRQn);
+		HAL_NVIC_EnableIRQ(TIM4_IRQn);
+	}
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
+
+  /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM4 global interrupt.
+  */
+void TIM4_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+	HAL_NVIC_DisableIRQ(TIM2_IRQn);
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	HAL_NVIC_DisableIRQ(TIM4_IRQn);
+  /* USER CODE END TIM4_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim4);
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
 }
 
 /**
@@ -267,6 +322,20 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
   /* USER CODE END EXTI15_10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global interrupt.
+  */
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
