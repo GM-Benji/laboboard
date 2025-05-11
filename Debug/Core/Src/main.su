@@ -1,4 +1,5 @@
-../Core/Src/main.c:59:6:stepper1Config	8	static
-../Core/Src/main.c:78:5:main	8	static
-../Core/Src/main.c:134:6:SystemClock_Config	88	static
-../Core/Src/main.c:179:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:60:6:stepperConfig	8	static
+../Core/Src/main.c:87:6:dcConfig	8	static
+../Core/Src/main.c:98:5:main	8	static
+../Core/Src/main.c:155:6:SystemClock_Config	88	static
+../Core/Src/main.c:200:6:Error_Handler	4	static,ignoring_inline_asm

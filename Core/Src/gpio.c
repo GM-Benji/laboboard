@@ -50,12 +50,12 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, OUT1_Pin|OUT2_Pin|Motor1_EN_Pin|Motor1_D_Pin
                           |Stepper1_M2_Pin|Stepper1_M1_Pin|Stepper2_M0_Pin|Stepper2_Step_Pin
-                          |Stepper2_E_Pin|Stepper2_Dir_Pin|Stepper3_M1_Pin|Stepper3_M0_Pin
-                          |GPIO_PIN_12, GPIO_PIN_RESET);
+                          |Stepper2_E_Pin|Stepper2_Dir_Pin|Stepper3_M2_Pin|Stepper3_M1_Pin
+                          |Stepper3_M0_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, Motor1_IN1_Pin|Motor1_IN2_Pin|Motor2_D_Pin|Motor2_IN1_Pin
-                          |Motor2_IN2_Pin|Stepper3_M2_Pin, GPIO_PIN_RESET);
+                          |Motor2_IN2_Pin|Stepper2_R_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, Stepper1_M0_Pin|Stepper1_E_Pin|Stepper1_Dir_Pin|Stepper1_R_Pin
@@ -70,12 +70,12 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : OUT1_Pin OUT2_Pin Motor1_EN_Pin Motor1_D_Pin
                            Stepper1_M2_Pin Stepper1_M1_Pin Stepper2_M0_Pin Stepper2_Step_Pin
-                           Stepper2_E_Pin Stepper2_Dir_Pin Stepper3_M1_Pin Stepper3_M0_Pin
-                           PC12 */
+                           Stepper2_E_Pin Stepper2_Dir_Pin Stepper3_M2_Pin Stepper3_M1_Pin
+                           Stepper3_M0_Pin */
   GPIO_InitStruct.Pin = OUT1_Pin|OUT2_Pin|Motor1_EN_Pin|Motor1_D_Pin
                           |Stepper1_M2_Pin|Stepper1_M1_Pin|Stepper2_M0_Pin|Stepper2_Step_Pin
-                          |Stepper2_E_Pin|Stepper2_Dir_Pin|Stepper3_M1_Pin|Stepper3_M0_Pin
-                          |GPIO_PIN_12;
+                          |Stepper2_E_Pin|Stepper2_Dir_Pin|Stepper3_M2_Pin|Stepper3_M1_Pin
+                          |Stepper3_M0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -88,9 +88,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(LIMIT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : Motor1_IN1_Pin Motor1_IN2_Pin Motor2_D_Pin Motor2_IN1_Pin
-                           Motor2_IN2_Pin Stepper3_M2_Pin */
+                           Motor2_IN2_Pin Stepper2_R_Pin */
   GPIO_InitStruct.Pin = Motor1_IN1_Pin|Motor1_IN2_Pin|Motor2_D_Pin|Motor2_IN1_Pin
-                          |Motor2_IN2_Pin|Stepper3_M2_Pin;
+                          |Motor2_IN2_Pin|Stepper2_R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

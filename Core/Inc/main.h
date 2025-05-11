@@ -106,11 +106,13 @@ void Error_Handler(void);
 #define Stepper2_E_GPIO_Port GPIOC
 #define Stepper2_Dir_Pin GPIO_PIN_9
 #define Stepper2_Dir_GPIO_Port GPIOC
-#define Stepper3_M2_Pin GPIO_PIN_15
-#define Stepper3_M2_GPIO_Port GPIOA
-#define Stepper3_M1_Pin GPIO_PIN_10
+#define Stepper2_R_Pin GPIO_PIN_15
+#define Stepper2_R_GPIO_Port GPIOA
+#define Stepper3_M2_Pin GPIO_PIN_10
+#define Stepper3_M2_GPIO_Port GPIOC
+#define Stepper3_M1_Pin GPIO_PIN_11
 #define Stepper3_M1_GPIO_Port GPIOC
-#define Stepper3_M0_Pin GPIO_PIN_11
+#define Stepper3_M0_Pin GPIO_PIN_12
 #define Stepper3_M0_GPIO_Port GPIOC
 #define LED1_Pin GPIO_PIN_2
 #define LED1_GPIO_Port GPIOD

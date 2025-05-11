@@ -23,6 +23,10 @@
 /* USER CODE BEGIN 0 */
 CAN_RxHeaderTypeDef   RxHeader;
 uint8_t               RxData[8];
+volatile uint8_t globalMode=0;
+volatile uint8_t stepperNr=0;
+volatile uint8_t dcNr=0;
+volatile uint8_t dutyCycle =120;
 /* USER CODE END 0 */
 
 CAN_HandleTypeDef hcan1;
@@ -160,9 +164,95 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
     Error_Handler();
   }
 
-  if(RxHeader.StdId== 200)
+  if(RxHeader.StdId== 202)
   {
-
+	  /*
+	   * RxData[0] - nr silnika: 1-3 krokowe, 4-5 dc, 6 żarówka, 0 wyłącza wszystko
+	   * RxData[1] - tryb krokowca: 0 - obrót o próbówkę, 1 - o 1 krok, 2 - o 10 kroków, 3 - o 100 kroków
+	   * RxData[2] - kierunek krokowca 0/1
+	   * RxData[3] - tryb wypełnienia dc: 0 - wypełnienie na 1V, 1 - custom wypełnienie, 2 wyłącza silnik
+	   * RxData[4] - custom wypełnienie dc % 0-100
+	   * RxData[5] - 0 żarówka off, 1 - żarówka on
+	   * */
+	  switch (RxData[0]) {
+	  	case 0:
+	  		HAL_NVIC_DisableIRQ(TIM2_IRQn);
+	  		HAL_NVIC_DisableIRQ(TIM3_IRQn);
+	  		HAL_GPIO_WritePin(OUT1_GPIO_Port,OUT1_Pin, GPIO_PIN_RESET);
+	  		break;
+		case 1:
+			HAL_NVIC_EnableIRQ(TIM3_IRQn);
+			stepperNr = 1;
+			if(RxData[2])
+			{
+				HAL_GPIO_WritePin(Stepper1_Dir_GPIO_Port,Stepper1_Dir_Pin,GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(Stepper1_Dir_GPIO_Port,Stepper1_Dir_Pin,GPIO_PIN_RESET);
+			}
+			break;
+		case 2:
+			HAL_NVIC_EnableIRQ(TIM3_IRQn);
+			stepperNr = 2;
+			if(RxData[2])
+			{
+				HAL_GPIO_WritePin(Stepper2_Dir_GPIO_Port,Stepper2_Dir_Pin,GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(Stepper2_Dir_GPIO_Port,Stepper2_Dir_Pin,GPIO_PIN_RESET);
+			}
+			break;
+		case 3:
+			HAL_NVIC_EnableIRQ(TIM3_IRQn);
+			stepperNr = 3;
+			if(RxData[2])
+			{
+				HAL_GPIO_WritePin(Stepper3_Dir_GPIO_Port,Stepper3_Dir_Pin,GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(Stepper3_Dir_GPIO_Port,Stepper3_Dir_Pin,GPIO_PIN_RESET);
+			}
+			break;
+		case 4:
+			if(RxData[3] != 2)
+			{
+				HAL_NVIC_EnableIRQ(TIM2_IRQn);
+			}
+			dcNr = 1;
+			break;
+		case 5:
+			if(RxData[3] != 2)
+			{
+				HAL_NVIC_EnableIRQ(TIM2_IRQn);
+			}
+			dcNr = 2;
+			break;
+		case 6:
+			if(RxData[5]==1)
+			{
+				HAL_GPIO_WritePin(OUT1_GPIO_Port,OUT1_Pin, GPIO_PIN_SET);
+			}
+			if(RxData[4]==0)
+			{
+				HAL_GPIO_WritePin(OUT1_GPIO_Port,OUT1_Pin, GPIO_PIN_RESET);
+			}
+			break;
+		default:
+			break;
+	}
+	if(RxData[3] == 2)
+	{
+		HAL_NVIC_DisableIRQ(TIM2_IRQn);
+	}
+	globalMode = RxData[1];
+	if(RxData[3] == 1 && RxData[4]<=100)
+	{
+		dutyCycle = RxData[4];
+	}
+	if(!RxData[3])
+	{
+		dutyCycle =120; // pwm na 1V do mieszania
+	}
   }
   HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 }

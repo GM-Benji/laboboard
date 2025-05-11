@@ -22,6 +22,11 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "can.h"
+extern volatile uint8_t globalMode;
+extern volatile uint8_t stepperNr;
+extern volatile uint8_t dcNr;
+extern volatile uint8_t dutyCycle;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -251,6 +256,15 @@ void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
 	static uint8_t counter;
+	static uint8_t final;
+	if(dutyCycle == 120)
+	{
+		final = 24;
+	}
+	else if(dutyCycle<=100)
+	{
+		final = (int) 100/dutyCycle;
+	}
 	//HAL_GPIO_TogglePin(Stepper2_Step_GPIO_Port,Stepper2_Step_Pin);
 	//HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
@@ -259,7 +273,7 @@ void TIM2_IRQHandler(void)
 		HAL_GPIO_WritePin(Motor1_IN1_GPIO_Port,Motor1_IN1_Pin,GPIO_PIN_RESET);
 	}
 	counter++;
-	if(counter==24)
+	if(counter==final)
 	{
 		counter =0;
 		HAL_GPIO_WritePin(Motor1_IN1_GPIO_Port,Motor1_IN1_Pin,GPIO_PIN_SET);
@@ -278,15 +292,72 @@ void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
 	static int16_t counter;
+	static uint8_t mode; // 0 - 317 || 1 - 1 || 2 - 10 || 3 - 100
+	static uint8_t lstepperNr=0;
 	counter++;
-	HAL_GPIO_TogglePin(Stepper2_Step_GPIO_Port,Stepper2_Step_Pin);
-	if(counter>317)
-	{
-		counter=0;
-		HAL_NVIC_DisableIRQ(TIM3_IRQn);
-		HAL_NVIC_EnableIRQ(TIM2_IRQn);
-		HAL_NVIC_EnableIRQ(TIM4_IRQn);
+	switch (lstepperNr) {
+		case 1:
+			HAL_GPIO_TogglePin(Stepper1_Step_GPIO_Port,Stepper1_Step_Pin);
+			break;
+		case 2:
+			HAL_GPIO_TogglePin(Stepper2_Step_GPIO_Port,Stepper2_Step_Pin);
+			break;
+		case 3:
+			HAL_GPIO_TogglePin(Stepper3_Step_GPIO_Port,Stepper3_Step_Pin);
+			break;
+		default:
+			break;
 	}
+
+	switch (mode) {
+		case 0:
+		if(counter>317)
+		{
+			counter=0;
+			HAL_NVIC_DisableIRQ(TIM3_IRQn);
+			HAL_NVIC_EnableIRQ(TIM2_IRQn);
+			HAL_NVIC_EnableIRQ(TIM4_IRQn);
+			mode = globalMode;
+			lstepperNr = stepperNr;
+		}
+			break;
+		case 1:
+		if(counter>16)
+		{
+			counter=0;
+			HAL_NVIC_DisableIRQ(TIM3_IRQn);
+			HAL_NVIC_EnableIRQ(TIM2_IRQn);
+			HAL_NVIC_EnableIRQ(TIM4_IRQn);
+			mode = globalMode;
+			lstepperNr = stepperNr;
+		}
+		break;
+		case 2:
+		if(counter> 80)
+		{
+			counter=0;
+			HAL_NVIC_DisableIRQ(TIM3_IRQn);
+			HAL_NVIC_EnableIRQ(TIM2_IRQn);
+			HAL_NVIC_EnableIRQ(TIM4_IRQn);
+			mode = globalMode;
+			lstepperNr = stepperNr;
+		}
+			break;
+		case 3:
+		if(counter>400)
+		{
+			counter=0;
+			HAL_NVIC_DisableIRQ(TIM3_IRQn);
+			HAL_NVIC_EnableIRQ(TIM2_IRQn);
+			HAL_NVIC_EnableIRQ(TIM4_IRQn);
+			mode = globalMode;
+			lstepperNr = stepperNr;
+		}
+			break;
+		default:
+			break;
+	}
+
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
@@ -300,9 +371,9 @@ void TIM3_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
-	HAL_NVIC_DisableIRQ(TIM2_IRQn);
+	/*HAL_NVIC_DisableIRQ(TIM2_IRQn);
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
-	HAL_NVIC_DisableIRQ(TIM4_IRQn);
+	HAL_NVIC_DisableIRQ(TIM4_IRQn);*/
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */

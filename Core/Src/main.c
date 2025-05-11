@@ -56,19 +56,39 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void stepper1Config()
+
+void stepperConfig()
 {
 	HAL_Delay(10);
-	HAL_GPIO_WritePin(Stepper3_M2_GPIO_Port,Stepper3_M2_Pin,GPIO_PIN_SET);
+	//Stepper1 config
+	HAL_GPIO_WritePin(Stepper1_R_GPIO_Port,Stepper1_R_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Stepper1_Dir_GPIO_Port,Stepper1_Dir_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(Stepper1_E_GPIO_Port,Stepper1_E_Pin,GPIO_PIN_RESET);//0- enable
+	HAL_GPIO_WritePin(Stepper1_M0_GPIO_Port,Stepper1_M0_Pin,GPIO_PIN_SET);//110 - 1/8 stepping
+	HAL_GPIO_WritePin(Stepper1_M1_GPIO_Port,Stepper1_M1_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Stepper1_M2_GPIO_Port,Stepper1_M2_Pin,GPIO_PIN_RESET);
+	//Stepper2 config
+	HAL_GPIO_WritePin(Stepper2_R_GPIO_Port,Stepper2_R_Pin,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(Stepper2_Dir_GPIO_Port,Stepper2_Dir_Pin,GPIO_PIN_RESET);
-	HAL_Delay(10);
 	HAL_GPIO_WritePin(Stepper2_E_GPIO_Port,Stepper2_E_Pin,GPIO_PIN_RESET);//0- enable
-	HAL_GPIO_WritePin(Stepper2_M0_GPIO_Port,Stepper2_M0_Pin,GPIO_PIN_SET);//110- full stepping
+	HAL_GPIO_WritePin(Stepper2_M0_GPIO_Port,Stepper2_M0_Pin,GPIO_PIN_SET);//110 - 1/8 stepping
 	HAL_GPIO_WritePin(Stepper2_M1_GPIO_Port,Stepper2_M1_Pin,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(Stepper2_M2_GPIO_Port,Stepper2_M2_Pin,GPIO_PIN_RESET);
+	//Stepper2 config
+	HAL_GPIO_WritePin(Stepper3_R_GPIO_Port,Stepper3_R_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Stepper3_Dir_GPIO_Port,Stepper3_Dir_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(Stepper3_E_GPIO_Port,Stepper3_E_Pin,GPIO_PIN_RESET);//0- enable
+	HAL_GPIO_WritePin(Stepper3_M0_GPIO_Port,Stepper3_M0_Pin,GPIO_PIN_SET);//110 - 1/8 stepping
+	HAL_GPIO_WritePin(Stepper3_M1_GPIO_Port,Stepper3_M1_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Stepper3_M2_GPIO_Port,Stepper3_M2_Pin,GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LED1_GPIO_Port,LED1_Pin, GPIO_PIN_SET);
 }
 
+void dcConfig()
+{
+	HAL_GPIO_WritePin(Motor1_EN_GPIO_Port,Motor1_EN_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Motor2_EN_GPIO_Port,Motor2_EN_Pin,GPIO_PIN_SET);
+}
 /* USER CODE END 0 */
 
 /**
@@ -90,6 +110,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
   HAL_NVIC_DisableIRQ(TIM2_IRQn);
+  HAL_NVIC_DisableIRQ(TIM3_IRQn);
   //HAL_NVIC_DisableIRQ(TIM3_IRQn);
   /* USER CODE END Init */
 
@@ -113,8 +134,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  stepper1Config();
-  HAL_GPIO_WritePin(Motor1_EN_GPIO_Port,Motor1_EN_Pin,GPIO_PIN_SET);
+  stepperConfig();
+  dcConfig();
 
   while (1)
   {
