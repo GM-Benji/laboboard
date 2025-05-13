@@ -27,6 +27,7 @@ volatile uint8_t globalMode=0;
 volatile uint8_t stepperNr=0;
 volatile uint8_t dcNr=0;
 volatile uint8_t dutyCycle =120;
+volatile uint8_t wchdgReset=0;
 /* USER CODE END 0 */
 
 CAN_HandleTypeDef hcan1;
@@ -254,6 +255,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		dutyCycle =120; // pwm na 1V do mieszania
 	}
   }
+  wchdgReset = 1;
   HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 }
 /* USER CODE END 1 */

@@ -27,6 +27,7 @@ extern volatile uint8_t globalMode;
 extern volatile uint8_t stepperNr;
 extern volatile uint8_t dcNr;
 extern volatile uint8_t dutyCycle;
+extern volatile uint8_t wchdgReset;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -294,6 +295,10 @@ void TIM3_IRQHandler(void)
 	static int16_t counter;
 	static uint8_t mode; // 0 - 317 || 1 - 1 || 2 - 10 || 3 - 100
 	static uint8_t lstepperNr=0;
+	if(counter==0){
+		mode = globalMode;
+		lstepperNr = stepperNr;
+	}
 	counter++;
 	switch (lstepperNr) {
 		case 1:
@@ -371,9 +376,19 @@ void TIM3_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
-	/*HAL_NVIC_DisableIRQ(TIM2_IRQn);
-	HAL_NVIC_EnableIRQ(TIM3_IRQn);
-	HAL_NVIC_DisableIRQ(TIM4_IRQn);*/
+	static uint8_t counter;
+	counter++;
+	if(wchdgReset)
+	{
+		counter = 0;
+	}
+	if(counter >= 10)
+	{
+		HAL_NVIC_DisableIRQ(TIM2_IRQn);
+		HAL_NVIC_DisableIRQ(TIM3_IRQn);
+		HAL_GPIO_WritePin(OUT1_GPIO_Port,OUT1_Pin, GPIO_PIN_RESET);
+	}
+	wchdgReset = 0;
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
